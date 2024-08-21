@@ -1,0 +1,6 @@
+{
+  "EmptyvalidationMessage": "Please fill out this field.",
+  "WrongValidationMessage": "Wrong login/password",
+  "invalidEmail": "Hello",
+  "invalidPassword": "Hello"
+}

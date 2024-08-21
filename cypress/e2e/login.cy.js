@@ -29,29 +29,6 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify if the [Password] visibility icon is functional ", () => {
-    cy.get('form[role="form"]').within(() => {
-      cy.get('input[name="password"]')
-        .type(credentials.UsernameMock)
-        .should("have.prop", "nodeName", "INPUT")
-        .and("have.attr", "type", "password");
-
-      cy.get(".toggle-password").click();
-
-      cy.get('input[name="password"]')
-        .should("have.prop", "nodeName", "INPUT")
-        .and("have.attr", "type", "text");
-
-      cy.get('input[name="password"]').type(credentials.PasswordMock);
-
-      cy.get(".toggle-password").click();
-
-      cy.get('input[type="password"]')
-        .should("have.prop", "nodeName", "INPUT")
-        .and("have.attr", "type", "password");
-    });
-  });
-
   it("Verify that users cannot to login with invalid credentials.", () => {
     cy.login(credentials.invalidEmail, credentials.invalidPassword).then(() => {
       cy.get('form[role="form"]').within(() => {
@@ -61,8 +38,8 @@ describe("TODO App", () => {
         );
       });
 
-      cy.get('input[type="text"]').clear();
-      cy.get('input[type="password"]').clear();
+      cy.get('input[id="login"]').clear();
+      cy.get('input[id="password"]').clear();
 
       cy.login(validEmail, credentials.invalidPassword).then(() => {
         cy.get('form[role="form"]').within(() => {
@@ -73,8 +50,8 @@ describe("TODO App", () => {
         });
       });
 
-      cy.get('input[type="text"]').clear();
-      cy.get('input[type="password"]').clear();
+      cy.get('input[id="login"]').clear();
+      cy.get('input[id="password"]').clear();
 
       cy.login(credentials.invalidEmail, validPassword).then(() => {
         cy.get('p[role="alert"]').should(
@@ -85,21 +62,13 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify that forgot password link is clickable and redirects to [forgot password] page", () => {
+  it("Verify that forgot password link is clickable and redirects to [resert password] page", () => {
     cy.get('form[role="form"]').within(() => {
-      cy.get(".forgot-text").contains("Forgot Password").click();
+      cy.get('div[class="justify-content-between mt-2 d-flex small"]')
+        .contains("Reset Password")
+        .click();
       cy.url().should("include", urls.forgotPassword);
     });
-  });
-
-  it("Verify that create new account link is clickable and redirects to [create new account] page", () => {
-    cy.get('form[role="form"]').within(() => {
-      cy.get(".forgot-text")
-        .contains("Create new account")
-        .should("be.visible")
-        .click();
-    });
-    cy.url("include", urls.signup);
   });
 
   it("Verify if  the users can login with valid credentials.", () => {

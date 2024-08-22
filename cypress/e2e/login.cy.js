@@ -6,6 +6,7 @@ describe("TODO App", () => {
   let credentials, urls;
   const validEmail = Cypress.env("validEmail");
   const validPassword = Cypress.env("validPassword");
+  const userEmail = Cypress.env("userEmail");
   before(() => {
     cy.fixture("datas.json").then((data) => {
       credentials = data;
@@ -71,8 +72,15 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify if  the users can login with valid credentials.", () => {
+  it("Verify if user can login with valid credentials.", () => {
+    cy.login(userEmail, validPassword);
+    cy.get(".full > .fa").click();
+    cy.get('div[role="menu"]').should("not.contain.text", "Settings");
+  });
+
+  it("Verify if admin can login with valid credentials.", () => {
     cy.login(validEmail, validPassword);
-    cy.url("include", urls.DashboardUrl);
+    cy.get(".full > .fa").click();
+    cy.get('div[role="menu"]').should("contain.text", "Settings");
   });
 });

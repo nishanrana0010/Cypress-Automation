@@ -119,6 +119,9 @@ describe("Bookings", () => {
       cy.get('td[class="o_data_cell o_field_cell o_readonly_modifier status"]')
         .eq(1)
         .should("contain.text", "Booked");
+      cy.get(
+        'td[class="o_data_cell o_field_cell o_list_char o_readonly_modifier"]'
+      ).should("contain.text", "New Qa Meeting - Mitchell Adminnn");
     });
   });
 
@@ -229,9 +232,12 @@ describe("Bookings", () => {
   //       });
   //   });
 
-  //   cy.get('div[class="o_searchview_input_container"]');
+  //   cy.get('div[class="o_searchview_input_container"]')
+  //     .type("{backspace}")
+  //     .type("New Qa Meet{enter}");
   //   // .within(() => {
-  //   cy.get('input[class="o_searchview_input"]').type(" Qa Meet{enter}");
+  //   cy.get('input[class="o_searchview_input"]');
+  //   // .click()
   //   // });
   // });
 
@@ -276,18 +282,78 @@ describe("Bookings", () => {
       "be.visible"
     );
   });
-  it.only("Verify that Admin cannot create Meetings Room without filling the mandatory fields", () => {
+  it("Verify that Admin cannot create Meetings Room without filling the mandatory fields", () => {
     cy.get('button[type="button"]').contains("Create").click();
-    // cy.get('div[class="oe_title"]').type("QA Meeting Room");
     cy.get('button[type="button"]').contains("Save").click();
     cy.get('div[class="o_notification_manager"]').should(
       "contain.text",
       "The following fields are invalid:"
     );
   });
-  it.only("", () => {
+  it("Verify that Admin can create a Meetings Room sucessfully", () => {
+    cy.get('button[type="button"]').contains("Create").click();
+    cy.get('div[class="oe_title"]').type("QA Meeting Room");
+    cy.get(
+      'input[class="o_field_integer o_field_number o_field_widget o_input"]'
+    ).type("10");
+
+    cy.get('button[type="button"]').contains("Save").click();
+    cy.get('nav[class="o_main_navbar"]').within(() => {
+      cy.get('a[class="o_menu_brand"]').click();
+    });
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('td[title="QA Meeting Room"]').should("exist");
+    });
+  });
+
+  it("Verify that user cannot delete a meeting room", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('div[class="custom-control custom-checkbox"]').eq(0).click();
+    });
+    cy.get('div[class="btn-group o_dropdown"]')
+      .contains("Action")
+      .should("exist")
+      .click();
+    cy.get('div[class="dropdown-menu o_dropdown_menu show"]').within(() => {
+      cy.get('a[class="dropdown-item undefined"]').contains("Delete").click();
+    });
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('button[type="button"]').contains("Ok").click();
+    });
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('td[title="QA Meeting Room"]').should("not.exist");
+    });
+  });
+
+  it.skip("Verify that user cannot delete a meeting room that is currently on progress", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('tr[class="o_data_row"]')
+        .contains("New meeting room")
+
+        .click();
+    });
+    cy.get('div[class="btn-group o_dropdown"]')
+      .contains("Action")
+      .should("exist")
+      .should("be.visible")
+      .click();
+    cy.get('div[class="dropdown-menu o_dropdown_menu show"]').within(() => {
+      cy.get('a[class="dropdown-item undefined"]').contains("Delete").click();
+    });
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('button[type="button"]').contains("Ok").click();
+    });
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('div[class="o_dialog_warning modal-body"]').should(
+        "contain.text",
+        "The operation cannot be completed: another model requires the record being deleted. If possible, archive it instead."
+      );
+    });
+  });
+  it.only("Verify that [Bookings] page displays all the meeting rooms", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.contains("New meeting room").should("exist");
+      cy.contains("G Big Meeting Room").should("exist");
     });
   });
 });

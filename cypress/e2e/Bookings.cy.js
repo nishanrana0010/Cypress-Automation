@@ -1,4 +1,4 @@
-describe("My Test Suite", () => {
+describe("Bookings", () => {
   const validEmail = Cypress.env("validEmail");
   const validPassword = Cypress.env("validPassword");
 
@@ -156,5 +156,138 @@ describe("My Test Suite", () => {
     cy.get('div[class="fc-content"]').should("contain.text", "New Qa Meet");
   });
 
-  it.only("");
+  it("Verify that users can edit bookings", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('tr[class="o_data_row"]')
+        .eq(0)
+        .within(() => {
+          cy.get('button[type="button"]').eq(0).click();
+        });
+    });
+    cy.get('div[class="btn-group"]').within(() => {
+      cy.get('button[type="button"]').eq(0).click();
+    });
+    cy.get('tr[data-time="11:00:00"]').click();
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('div[class="oe_title"]').type("New Qa Meet 10");
+      cy.get(
+        'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
+      )
+        .clear()
+        .type("08/23/2024 16:29:35");
+
+      cy.get('span[class="o_datepicker_button"]').click({ force: true });
+      cy.get(
+        'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
+      )
+        .clear()
+        .type("00:30");
+      cy.get('button[type="button"]').contains("Save").click();
+    });
+    cy.get('nav[class="o_main_navbar"]').within(() => {
+      cy.get('a[class="o_menu_brand"]').contains("Bookings").click();
+    });
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('tr[class="o_data_row"]')
+        .eq(0)
+        .within(() => {
+          cy.get('button[type="button"]').eq(0).click();
+        });
+    });
+    cy.get('div[class="btn-group"]').within(() => {
+      cy.get('button[type="button"]').eq(0).click();
+    });
+
+    cy.get('tbody[class="fc-body"]').within(() => {
+      cy.get('div[class="fc-scroller fc-time-grid-container"]')
+        .contains("New Qa Meet 10")
+        .eq(0)
+        .click();
+    });
+    cy.get('div[class="o_cw_body"]').within(() => {
+      cy.get('div[class="card-footer border-top"]').within(() => {
+        cy.get('a[class="btn btn-primary o_cw_popover_edit"]')
+          .contains("Edit")
+          .click();
+      });
+    });
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('div[class="oe_title"]').within(() => {
+        cy.get('input[type="text"]').clear().type("New Qa Meet 10");
+      });
+      cy.get('button[type="button"]').contains("Save").click();
+    });
+    cy.get('tbody[class="fc-body"]').contains("New Qa Meet 10").should("exist");
+  });
+
+  // it.only("verify that users can search for a specified Booking", () => {
+  //   cy.get('tbody[class="ui-sortable"]').within(() => {
+  //     cy.get('tr[class="o_data_row"]')
+  //       .eq(0)
+  //       .within(() => {
+  //         cy.get('button[type="button"]').eq(0).click();
+  //       });
+  //   });
+
+  //   cy.get('div[class="o_searchview_input_container"]');
+  //   // .within(() => {
+  //   cy.get('input[class="o_searchview_input"]').type(" Qa Meet{enter}");
+  //   // });
+  // });
+
+  it("Verify that users can delete bookings", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('tr[class="o_data_row"]')
+        .eq(0)
+        .within(() => {
+          cy.get('button[type="button"]').eq(0).click();
+        });
+    });
+    cy.get('div[class="btn-group"]').within(() => {
+      cy.get('button[type="button"]').eq(0).click();
+    });
+    cy.get('tbody[class="fc-body"]').contains("New Qa Meet 10").click();
+    cy.get('div[class="o_cw_body"]').within(() => {
+      cy.get('div[class="card-footer border-top"]').within(() => {
+        cy.get('a[class="btn btn-secondary o_cw_popover_delete ml-2"]')
+          .contains("Delete")
+          .click();
+      });
+    });
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('button[type="button"]').contains("Ok").click();
+    });
+
+    cy.get('tbody[class="fc-body"]')
+      .contains("New Qa Meet 10")
+      .should("not.exist");
+  });
+
+  it("Verify that the [Group By] filter is functional", () => {
+    cy.get('div[class="o_cp_right"]').within(() => {
+      cy.get('div[class="btn-group o_dropdown"]')
+        .contains(" Group By ")
+        .click();
+    });
+    cy.get('button[type="button"]').contains("Add Custom Group").click();
+    cy.get('button[type="button"]').contains("Apply").click();
+    cy.get('div[class="o_content"]').click();
+    cy.get('tr[class="o_group_header o_group_has_content"]').should(
+      "be.visible"
+    );
+  });
+  it.only("Verify that Admin cannot create Meetings Room without filling the mandatory fields", () => {
+    cy.get('button[type="button"]').contains("Create").click();
+    // cy.get('div[class="oe_title"]').type("QA Meeting Room");
+    cy.get('button[type="button"]').contains("Save").click();
+    cy.get('div[class="o_notification_manager"]').should(
+      "contain.text",
+      "The following fields are invalid:"
+    );
+  });
+  it.only("", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('div[class="custom-control custom-checkbox"]').eq(0).click();
+    });
+  });
 });

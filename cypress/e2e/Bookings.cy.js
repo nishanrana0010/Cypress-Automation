@@ -64,15 +64,6 @@ describe("My Test Suite", () => {
     );
   });
 
-  //   it.only("Verify that user can book an available room sucessfully", () => {
-  //     cy.get('tbody[class="ui-sortable"]').within(() => {
-  //       cy.get('tr[class="o_data_row"]').eq(0).within(()=>{
-  // cy.get('td[class="o_data_cell o_field_cell o_readonly_modifier status"]')
-
-  // });
-  //     });
-  //   });
-
   it("Verify that a validation message is displayed while booking a room that is already booked", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
@@ -101,7 +92,7 @@ describe("My Test Suite", () => {
     );
   });
 
-  it("verfiy if [booked] status is displayed at [Current Status] when a room is booked at that time stamp", () => {
+  it("Verify that the [Current Status] and [Current schedules] dispalys correct informations", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(1)
@@ -131,48 +122,39 @@ describe("My Test Suite", () => {
     });
   });
 
-  it.only("Verify that user can book an available room successfully on filling mandatory fields", () => {
-let cellText;
+  it("Verify that users can book available rooms sucessfully on filling the mandatory fields", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
-        .eq(1)
+        .eq(0)
         .within(() => {
-          cy.get(
-            'td[class="o_data_cell o_field_cell o_readonly_modifier status"]'
-          )
-            .should("exist")
-            .then(($cell) => {
-              const cellText = $cell.text().trim(); // Get and trim the text
-              if (cellText === "Available") {
-                cy.get('button[type="button"]').contains("Book Room").click();
-}
-            })
-        })
-    })
-  })    
+          cy.get('button[type="button"]').eq(0).click();
+        });
+    });
+    cy.get('div[class="btn-group"]').within(() => {
+      cy.get('button[type="button"]').eq(0).click();
+    });
+    cy.get('tr[data-time="11:00:00"]').click();
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('div[class="oe_title"]').type("New Qa Meet");
+      cy.get(
+        'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
+      )
+        .clear()
+        .type("08/23/2024 11:29:35");
 
+      cy.get('span[class="o_datepicker_button"]').click({ force: true });
+      cy.get(
+        'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
+      )
+        .clear()
+        .type("00:30");
+      cy.get('button[type="button"]').contains("Save").click();
+    });
+    cy.get('div[class="btn-group"]').within(() => {
+      cy.get('button[type="button"]').eq(0).click();
+    });
+    cy.get('div[class="fc-content"]').should("contain.text", "New Qa Meet");
+  });
 
-  //               cy.get('div[class="oe_title"]')
-  //                 .should("be.visible")
-  //                 .type("New QA meet 3");
-  //               cy.get(
-  //                 'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
-  //               )
-  //                 .clear()
-  //                 .type("08/22/2024 16:29:35");
-
-  //               cy.get('span[class="fa fa-check primary"]').click();
-  //               cy.get(
-  //                 'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
-  //               )
-  //                 .clear()
-  //                 .type("00:30");
-  //               cy.get('button[type="button"]').contains("Save").click();
-  //             } else {
-  //               // cy.log("The room is ");
-  //             }
-  //           });
-  //       });
-  //   });
-  // });
+  it.only("");
 });

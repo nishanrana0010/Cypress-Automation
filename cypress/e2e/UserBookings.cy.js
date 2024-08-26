@@ -1,16 +1,23 @@
 describe("Bookings", () => {
+  let credentials, urls;
   const validEmail = Cypress.env("validEmail");
   const validPassword = Cypress.env("validPassword");
-
+  before(() => {
+    cy.fixture("datas.json").then((data) => {
+      credentials = data;
+    });
+    cy.fixture("urls.json").then((data) => {
+      urls = data;
+    });
+  });
   beforeEach(() => {
-    cy.loginThroughApi(validEmail, validPassword);
+    cy.session("UserLogin", () => {
+      cy.UserLogin(validEmail, validPassword);
+    });
 
-    cy.visit("#action=104&active_id=mailbox_inbox&cids=1&menu_id=83");
-    cy.get(".full > .fa").click();
-    cy.get('div[class="dropdown-menu pb-25 pt-50 show"]')
-      .find("a")
-      .contains("Bookings")
-      .click();
+    cy.visit(urls.BookingsUrl);
+    cy.get('ul[class="o_menu_apps"]').click();
+    cy.get('div[role="menu"]').find("a").contains("Bookings").click();
   });
 
   it("Verify that [bookings] is clickable in the menu list", () => {
@@ -60,7 +67,7 @@ describe("Bookings", () => {
     cy.get('button[class="btn btn-primary o_form_button_save"]').click();
     cy.get('div[class="o_notification_manager"]').should(
       "contain.text",
-      "The following fields are invalid:"
+      credentials.validationMessage
     );
   });
 
@@ -72,23 +79,15 @@ describe("Bookings", () => {
           cy.get('button[type="button"]').eq(1).click();
         });
     });
-    cy.get('div[class="oe_title').type("New QA meet 2");
-    cy.get(
-      'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
-    )
-      .clear()
-      .type("08/22/2024 14:36:35");
+    cy.get('div[class="oe_title').type(credentials.BookingTitle);
+    cy.get('div[name="start"]').clear().type(credentials.Date);
 
     cy.get('span[class="fa fa-check primary"]').click();
-    cy.get(
-      'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
-    )
-      .clear()
-      .type("00:30");
+    cy.get('input[name="duration"]').clear().type(credentials.Duration);
     cy.get('button[type="button"]').contains("Save").click();
     cy.get('div[class="modal-content"]').should(
       "contain.text",
-      "G Big Meeting Room is already booked."
+      credentials.BookedValidation
     );
   });
 
@@ -100,28 +99,21 @@ describe("Bookings", () => {
           cy.get('button[type="button"]').eq(1).click();
         });
     });
-    cy.get('div[class="oe_title"]').type("New QA meet 3");
-    cy.get(
-      'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
-    )
-      .clear()
-      .type("08/22/2024 16:29:35");
+    cy.get('div[class="oe_title"]').type(credentials.BookingTitle2);
+    cy.get('div[name="start"]').clear().type(credentials.Date2);
 
     cy.get('span[class="fa fa-check primary"]').click();
-    cy.get(
-      'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
-    )
-      .clear()
-      .type("00:30");
+    cy.get('input[name="duration"]').clear().type(credentials.Duration);
     cy.get('button[type="button"]').contains("Save").click();
     cy.get('[accesskey="b"] > a').click();
     cy.get('tbody[class="ui-sortable"]').within(() => {
-      cy.get('td[class="o_data_cell o_field_cell o_readonly_modifier status"]')
+      cy.get('td[title="Available"]')
         .eq(1)
-        .should("contain.text", "Booked");
-      cy.get(
-        'td[class="o_data_cell o_field_cell o_list_char o_readonly_modifier"]'
-      ).should("contain.text", "New Qa Meeting - Mitchell Adminnn");
+        .should("contain.text", credentials.CurrentStatus);
+      cy.get('td[title="No Schedule"]').should(
+        "contain.text",
+        credentials.CurrentSchedule
+      );
     });
   });
 
@@ -138,25 +130,20 @@ describe("Bookings", () => {
     });
     cy.get('tr[data-time="11:00:00"]').click();
     cy.get('div[class="modal-content"]').within(() => {
-      cy.get('div[class="oe_title"]').type("New Qa Meet");
-      cy.get(
-        'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
-      )
-        .clear()
-        .type("08/23/2024 11:29:35");
+      cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
+      cy.get('div[name="start"]').clear().type(credentials.Date);
 
       cy.get('span[class="o_datepicker_button"]').click({ force: true });
-      cy.get(
-        'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
-      )
-        .clear()
-        .type("00:30");
+      cy.get('input[name="duration"]').clear().type(credentials.Duration);
       cy.get('button[type="button"]').contains("Save").click();
     });
     cy.get('div[class="btn-group"]').within(() => {
       cy.get('button[type="button"]').eq(0).click();
     });
-    cy.get('div[class="fc-content"]').should("contain.text", "New Qa Meet");
+    cy.get('div[class="fc-content"]').should(
+      "contain.text",
+      credentials.BookingTitle
+    );
   });
 
   it("Verify that users can edit bookings", () => {
@@ -172,19 +159,11 @@ describe("Bookings", () => {
     });
     cy.get('tr[data-time="11:00:00"]').click();
     cy.get('div[class="modal-content"]').within(() => {
-      cy.get('div[class="oe_title"]').type("New Qa Meet 10");
-      cy.get(
-        'div[class="o_datepicker o_field_date o_field_widget o_required_modifier"]'
-      )
-        .clear()
-        .type("08/23/2024 16:29:35");
+      cy.get('div[class="oe_title"]').type(credentials.BookingTitle10);
+      cy.get('div[name="start"]').clear().type(credentials.Date);
 
       cy.get('span[class="o_datepicker_button"]').click({ force: true });
-      cy.get(
-        'input[class="o_field_float o_field_number o_field_widget o_input o_required_modifier"]'
-      )
-        .clear()
-        .type("00:30");
+      cy.get('input[name="duration"]').clear().type(credentials.Duration);
       cy.get('button[type="button"]').contains("Save").click();
     });
     cy.get('nav[class="o_main_navbar"]').within(() => {
@@ -203,7 +182,7 @@ describe("Bookings", () => {
 
     cy.get('tbody[class="fc-body"]').within(() => {
       cy.get('div[class="fc-scroller fc-time-grid-container"]')
-        .contains("New Qa Meet 10")
+        .contains(credentials.BookingTitle10)
         .eq(0)
         .click();
     });
@@ -216,30 +195,32 @@ describe("Bookings", () => {
     });
     cy.get('div[class="modal-content"]').within(() => {
       cy.get('div[class="oe_title"]').within(() => {
-        cy.get('input[type="text"]').clear().type("New Qa Meet 10");
+        cy.get('input[type="text"]').clear().type(credentials.BookingTitle10);
       });
       cy.get('button[type="button"]').contains("Save").click();
     });
-    cy.get('tbody[class="fc-body"]').contains("New Qa Meet 10").should("exist");
+    cy.get('tbody[class="fc-body"]')
+      .contains(credentials.BookingTitle10)
+      .should("exist");
   });
 
-  // it.only("verify that users can search for a specified Booking", () => {
-  //   cy.get('tbody[class="ui-sortable"]').within(() => {
-  //     cy.get('tr[class="o_data_row"]')
-  //       .eq(0)
-  //       .within(() => {
-  //         cy.get('button[type="button"]').eq(0).click();
-  //       });
-  //   });
+  it("verify that users can search for a specified Booking", () => {
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.get('tr[class="o_data_row"]')
+        .eq(0)
+        .within(() => {
+          cy.get('button[type="button"]').eq(0).click();
+        });
+    });
 
-  //   cy.get('div[class="o_searchview_input_container"]')
-  //     .type("{backspace}")
-  //     .type("New Qa Meet{enter}");
-  //   // .within(() => {
-  //   cy.get('input[class="o_searchview_input"]');
-  //   // .click()
-  //   // });
-  // });
+    cy.get('div[class="o_searchview_input_container"]')
+      .type("{backspace}")
+      .type("New Qa Meet{enter}");
+    // .within(() => {
+    cy.get('input[class="o_searchview_input"]');
+    // .click()
+    // });
+  });
 
   it("Verify that users can delete bookings", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
@@ -252,7 +233,9 @@ describe("Bookings", () => {
     cy.get('div[class="btn-group"]').within(() => {
       cy.get('button[type="button"]').eq(0).click();
     });
-    cy.get('tbody[class="fc-body"]').contains("New Qa Meet 10").click();
+    cy.get('tbody[class="fc-body"]')
+      .contains(credentials.BookingTitle10)
+      .click();
     cy.get('div[class="o_cw_body"]').within(() => {
       cy.get('div[class="card-footer border-top"]').within(() => {
         cy.get('a[class="btn btn-secondary o_cw_popover_delete ml-2"]')
@@ -265,7 +248,7 @@ describe("Bookings", () => {
     });
 
     cy.get('tbody[class="fc-body"]')
-      .contains("New Qa Meet 10")
+      .contains(credentials.BookingTitle10)
       .should("not.exist");
   });
 
@@ -283,30 +266,23 @@ describe("Bookings", () => {
     );
   });
   it("Verify that Admin cannot create Meetings Room without filling the mandatory fields", () => {
-    cy.get('button[type="button"]').contains("Create").click();
-    cy.get('button[type="button"]').contains("Save").click();
+    cy.createRoom("", "");
     cy.get('div[class="o_notification_manager"]').should(
       "contain.text",
-      "The following fields are invalid:"
+      credentials.validationMessage
     );
   });
   it("Verify that Admin can create a Meetings Room sucessfully", () => {
-    cy.get('button[type="button"]').contains("Create").click();
-    cy.get('div[class="oe_title"]').type("QA Meeting Room");
-    cy.get(
-      'input[class="o_field_integer o_field_number o_field_widget o_input"]'
-    ).type("10");
-
-    cy.get('button[type="button"]').contains("Save").click();
+    cy.createRoom("New Qa Room", "20");
     cy.get('nav[class="o_main_navbar"]').within(() => {
       cy.get('a[class="o_menu_brand"]').click();
     });
     cy.get('tbody[class="ui-sortable"]').within(() => {
-      cy.get('td[title="QA Meeting Room"]').should("exist");
+      cy.get('td[tabindex="-1"]').should("contain.text", "New Qa Room");
     });
   });
 
-  it("Verify that user cannot delete a meeting room", () => {
+  it("Verify that user can delete a meeting room", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('div[class="custom-control custom-checkbox"]').eq(0).click();
     });
@@ -325,7 +301,7 @@ describe("Bookings", () => {
     });
   });
 
-  it.skip("Verify that user cannot delete a meeting room that is currently on progress", () => {
+  it("Verify that user cannot delete a meeting room that is currently on progress", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains("New meeting room")
@@ -346,14 +322,86 @@ describe("Bookings", () => {
     cy.get('div[class="modal-content"]').within(() => {
       cy.get('div[class="o_dialog_warning modal-body"]').should(
         "contain.text",
-        "The operation cannot be completed: another model requires the record being deleted. If possible, archive it instead."
+        credentials.RoomDeletionValidation
       );
     });
   });
-  it.only("Verify that [Bookings] page displays all the meeting rooms", () => {
+  it("Verify that [Bookings] page displays all the meeting rooms", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
-      cy.contains("New meeting room").should("exist");
-      cy.contains("G Big Meeting Room").should("exist");
+      cy.contains(credentials.MeetingRoom1).should("exist");
+      cy.contains(credentials.MeetingRoom2).should("exist");
     });
+  });
+
+  it("Verify that [Bookings] page displays all the meeting rooms", () => {
+    const mockResponse = {
+      meetingRooms: [{ name: "New Qa Room" }, { seats: "10" }],
+    };
+
+    cy.intercept(
+      "GET",
+      "#action=233&model=b_room_booking.room&view_type=list&cids=1&menu_id=122",
+      mockResponse
+    ).as("getMeetingRooms");
+
+    cy.wait("@getMeetingRooms");
+
+    cy.get('tbody[class="ui-sortable"]').within(() => {
+      cy.contains("New Qa Room").should("exist");
+      cy.contains("seats").should("exist");
+    });
+  });
+
+  it("should export data and download the file", () => {
+    const expectedRooms = [
+      {
+        Name: "G Big Meeting Room",
+        Seats: 10,
+        Status: "Available",
+        Schedule: "No Schedule",
+      },
+      {
+        Name: "G Small Meeting Room",
+        Seats: 8,
+        Status: "Available",
+        Schedule: "No Schedule",
+      },
+      {
+        Name: "F2 Big Meeting Room",
+        Seats: 14,
+        Status: "Available",
+        Schedule: "No Schedule",
+      },
+      {
+        Name: "F1 Big Meeting Room",
+        Seats: 12,
+        Status: "Available",
+        Schedule: "No Schedule",
+      },
+    ];
+
+    cy.get('button[title="Export All"]').click();
+
+    cy.readFile("cypress/downloads/b_room_booking.room.xlsx", "binary").then(
+      (fileContent) => {
+        const XLSX = require("xlsx");
+        const workbook = XLSX.read(fileContent, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+
+        expectedRooms.forEach((room, index) => {
+          const row = index + 2;
+          const nameCell = `B${row}`;
+          const seatsCell = `C${row}`;
+          const statusCell = `D${row}`;
+          const scheduleCell = `E${row}`;
+
+          expect(sheet[nameCell].v).to.equal(room.Name);
+          expect(sheet[seatsCell].v).to.equal(room.Seats);
+          expect(sheet[statusCell].v).to.equal(room.Status);
+          expect(sheet[scheduleCell].v).to.equal(room.Schedule);
+        });
+      }
+    );
   });
 });

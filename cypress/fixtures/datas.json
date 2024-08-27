@@ -5,9 +5,10 @@
   "invalidPassword": "Hello",
 
   "BookingTitle1": "New QA meet 1",
-  "Date": "08/26/2024 14:36:35",
+  "Date1": "08/27/2024 16:36:35",
+  "Date": "08/27/2024 14:36:35",
   "Duration": "00:30",
-  "BookedValidation": "G Small Meeting Room is already booked.",
+  "BookedValidation": "F2 Big Meeting Room is already booked.",
 
   "BookingTitle2": "New QA meet 2",
   "Date2": "08/22/2024 16:29:35",
@@ -20,8 +21,9 @@
   "RoomTitle": "QA Meeting Room",
   "RoomDeletionValidation": "The operation cannot be completed: another model requires the record being deleted. If possible, archive it instead.",
 
-  "MeetingRoom1": "G Small Meeting Room",
-  "MeetingRoom2": "G Big Meeting Room",
+  "MeetingRoomg": "G Small Meeting Room",
+  "MeetingRoomG": "G Big Meeting Room",
 
-  "seats": "10"
+  "seats": "10",
+  "CreateRoom": "New Qa Room"
 }

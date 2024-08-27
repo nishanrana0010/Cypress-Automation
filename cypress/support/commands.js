@@ -48,3 +48,41 @@ Cypress.Commands.add("createRoom", (title, seat) => {
 
   cy.get('button[type="button"]').contains("Save").click();
 });
+
+// Cypress.Commands.add("createBooking", (rowIndex, credentials) => {
+//   cy.get('tbody[class="ui-sortable"]').within(() => {
+//     cy.get('tr[class="o_data_row"]')
+//       .eq(rowIndex)
+//       .within(() => {
+//         cy.get('button[type="button"]').eq(1).click();
+//       });
+//   });
+
+//   cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
+//   cy.get('div[name="start"]').clear().type(credentials.Date);
+//   cy.get('span[class="fa fa-check primary"]').click();
+//   cy.get('input[name="duration"]').clear().type(credentials.Duration);
+//   cy.get('button[type="button"]').contains("Save").click();
+// });
+Cypress.Commands.add("createBooking", (rowIndex, credentials) => {
+  cy.get('tbody[class="ui-sortable"]').within(() => {
+    cy.get('tr[class="o_data_row"]')
+      .eq(rowIndex)
+      .within(() => {
+        cy.get('button[type="button"]').eq(1).click();
+      });
+  });
+
+  if (credentials.BookingTitle) {
+    cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
+  }
+  if (credentials.Date) {
+    cy.get('div[name="start"]').clear().type(credentials.Date);
+    cy.get('span[class="fa fa-check primary"]').click();
+  }
+
+  if (credentials.Duration) {
+    cy.get('input[name="duration"]').clear().type(credentials.Duration);
+  }
+  cy.get('button[type="button"]').contains("Save").click();
+});

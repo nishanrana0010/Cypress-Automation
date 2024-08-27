@@ -79,7 +79,7 @@ describe("Bookings", () => {
           cy.get('button[type="button"]').eq(1).click();
         });
     });
-    cy.get('div[class="oe_title').type(credentials.BookingTitle);
+    cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
     cy.get('div[name="start"]').clear().type(credentials.Date);
 
     cy.get('span[class="fa fa-check primary"]').click();

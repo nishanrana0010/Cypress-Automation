@@ -1,5 +1,6 @@
 {
   "LoginUrl": "/login",
   "forgotPassword": "/reset_password",
-  "BookingsUrl": "#action=104&active_id=mailbox_inbox&cids=1&menu_id=83"
+  "BookingsUrl": "#action=104&active_id=mailbox_inbox&cids=1&menu_id=83",
+  "MinutesUrl": "#action=104&active_id=mailbox_inbox&cids=1&menu_id=83"
 }

@@ -69,7 +69,7 @@ describe("Bookings", () => {
     });
   });
 
-  it("Verify that user cannot delete a meeting room that is currently on progress", () => {
+  it("Verify that Admin cannot delete a meeting room that is currently on progress", () => {
     cy.createBooking(3, credentials);
     cy.get('ol[class="breadcrumb"]').within(() => {
       cy.contains("a", "Rooms").click();

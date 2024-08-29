@@ -1,0 +1,22 @@
+{
+  "ValidationMessage": "The following fields are invalid:",
+
+  "MeetingTitle": "QA Meeting",
+  "Attendees1": "Ace User",
+  "Attendees2": "Aceuser",
+  "MeetingDescription": "This meeting will cover {enter} - Discuss testing strategies and plans{enter} - Review current testing progress",
+  "NotificationDays": "2",
+  "NewMeetingTitle": "New QA Meeting",
+
+  "Filter": "Add Custom Filter",
+  "AdminName": "Mitchell Adminnn",
+  "EOD": "End of the day",
+
+  "MinuteTitle": "New QA Minute",
+  "EditedTitle": "Edited QA Minute",
+
+  "NextDate": "08/30/2024",
+  "NextDate2": "08/29/2024",
+  "UpdatesContents": "-Bug Resolution",
+  "DateValidation": "Something went wrong !"
+}

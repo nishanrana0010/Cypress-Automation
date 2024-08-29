@@ -3,7 +3,7 @@ describe("Bookings", () => {
   const validEmail = Cypress.env("validEmail");
   const validPassword = Cypress.env("validPassword");
   before(() => {
-    cy.fixture("datas.json").then((data) => {
+    cy.fixture("UserData.json").then((data) => {
       credentials = data;
     });
     cy.fixture("urls.json").then((data) => {

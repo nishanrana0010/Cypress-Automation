@@ -14,6 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import "cypress-mailosaur";
 import "./commands";
 Cypress.on("uncaught:exception", (err) => {
   Cypress.log({

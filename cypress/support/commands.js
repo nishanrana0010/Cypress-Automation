@@ -49,21 +49,6 @@ Cypress.Commands.add("createRoom", (title, seat) => {
   cy.get('button[type="button"]').contains("Save").click();
 });
 
-// Cypress.Commands.add("createBooking", (rowIndex, credentials) => {
-//   cy.get('tbody[class="ui-sortable"]').within(() => {
-//     cy.get('tr[class="o_data_row"]')
-//       .eq(rowIndex)
-//       .within(() => {
-//         cy.get('button[type="button"]').eq(1).click();
-//       });
-//   });
-
-//   cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
-//   cy.get('div[name="start"]').clear().type(credentials.Date);
-//   cy.get('span[class="fa fa-check primary"]').click();
-//   cy.get('input[name="duration"]').clear().type(credentials.Duration);
-//   cy.get('button[type="button"]').contains("Save").click();
-// });
 Cypress.Commands.add("createBooking", (rowIndex, credentials) => {
   cy.get('tbody[class="ui-sortable"]').within(() => {
     cy.get('tr[class="o_data_row"]')
@@ -90,30 +75,22 @@ Cypress.Commands.add("createBooking", (rowIndex, credentials) => {
 Cypress.Commands.add(
   "createMeeting",
   (meetingTitle, member1, member2, priorNotification, meetingDescription) => {
-    // Click the 'Create' button
     cy.get('span[class="d-none d-sm-inline"]').contains("Create").click();
 
-    // Type the meeting title
     cy.get('input[placeholder="Meeting Title"]').type(meetingTitle);
 
-    // Select the first member
     cy.get('div[name="member_ids"]').eq(0).click();
     cy.get('li[class="ui-menu-item"]').contains(member1).click();
 
-    // Select the second member
     cy.get('div[name="member_ids"]').eq(0).click();
     cy.get('li[class="ui-menu-item"]').contains(member2).click();
 
-    // Set prior notification
     cy.get('input[name="prior_notification"]').clear().type(priorNotification);
 
-    // Enter the meeting description
     cy.get('div[class="note-editable panel-body"]').type(meetingDescription);
 
-    // Click the 'Save' button
     cy.get('button[type="button"]').contains("Save").click();
 
-    // Navigate back to the 'Meetings' page
     cy.get('ol[class="breadcrumb"]').within(() => {
       cy.contains("a", "Meetings").click();
     });
@@ -152,11 +129,4 @@ Cypress.Commands.add("createMinutes", (credentials) => {
   cy.get('button[type="button"]').contains("Save").click();
 });
 
-// Cypress.Commands.add('getEmailLink', (mailosaurEmailAddress) => {
-//   cy.mailosaurGetMessage(serverId, {
-//     sentTo: ${mailosaurEmailAddress},
-//   }).then((email) => {
-//     cy.log(email.subject);
-//   });
-// });
 // CYPRESS_MAILOSAUR_API_KEY=PfeK9vNV00JcFuXWTP2RabJg76ga2MOt npx cypress open

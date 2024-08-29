@@ -25,5 +25,7 @@
   "MeetingRoomG": "G Big Meeting Room",
 
   "seats": "10",
-  "CreateRoom": "New Qa Room"
+  "CreateRoom": "New Qa Room",
+  "EmailSubject": "Minutes: QA Meeting",
+  "EmptyvalidationMessage": "Please fill out this field."
 }

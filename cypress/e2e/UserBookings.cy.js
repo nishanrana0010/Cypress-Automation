@@ -20,19 +20,18 @@ describe("Bookings", () => {
     cy.get('div[role="menu"]').find("a").contains("Bookings").click();
   });
 
-  it("Verify that [bookings] is clickable in the menu list", () => {
+  it("[Bookings] should be clickable in the menu list", () => {
     cy.get('a[class="o_menu_brand"]').should("include.text", "Bookings");
     cy.get('tbody[class="ui-sortable"]').should("exist");
   });
-  it("Verify that [Bookings] page displays all the meeting rooms", () => {
+  it("[Bookings] page should display all the meeting rooms", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.contains(credentials.MeetingRoomg).should("exist");
       cy.contains(credentials.MeetingRoomG).should("exist");
     });
   });
 
-  it("Verify that the user can view the schedules of a meeting room.", () => {
-    //first
+  it("User should be able to view the schedules of a meeting room.", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .first()
@@ -48,7 +47,6 @@ describe("Bookings", () => {
       cy.contains("a", "Rooms").click();
     });
 
-    //2nd
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(1)
@@ -64,24 +62,15 @@ describe("Bookings", () => {
       cy.contains("a", "Rooms").click();
     });
   });
-  //////
-  it("Verify that user cannot book room without filling mandatory fields", () => {
-    // cy.get('tbody[class="ui-sortable"]').within(() => {
-    //   cy.get('tr[class="o_data_row"]')
-    //     .first()
-    //     .within(() => {
-    //       cy.get('button[type="button"]').eq(1).click();
-    //     });
-    // });
-    // cy.get('div[class="oe_title"]').type("New QA Meet");
-    // cy.get('button[class="btn btn-primary o_form_button_save"]').click();
+
+  it("User should not be able to book room without filling mandatory fields", () => {
     cy.createBooking(0, "");
     cy.get('div[class="o_notification_manager"]').should(
       "contain.text",
       credentials.validationMessage
     );
   });
-  it("Verify that users can book available rooms sucessfully on filling the mandatory fields", () => {
+  it("Users should be able to book available rooms sucessfully on filling the mandatory fields", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(2)
@@ -111,20 +100,7 @@ describe("Bookings", () => {
     );
   });
 
-  it("Verify that a validation message is displayed while booking a room that is already booked", () => {
-    // cy.get('tbody[class="ui-sortable"]').within(() => {
-    //   cy.get('tr[class="o_data_row"]')
-    //     .eq(3)
-    //     .within(() => {
-    //       cy.get('button[type="button"]').eq(1).click();
-    //     });
-    // });
-    // cy.get('div[class="oe_title"]').type(credentials.BookingTitle);
-    // cy.get('div[name="start"]').clear().type(credentials.Date);
-
-    // cy.get('span[class="fa fa-check primary"]').click();
-    // cy.get('input[name="duration"]').clear().type(credentials.Duration);
-    // cy.get('button[type="button"]').contains("Save").click();
+  it("validation message should be displayed while booking a room that is already booked", () => {
     cy.createBooking(2, credentials);
     cy.get('div[class="modal-content"]').should(
       "contain.text",
@@ -132,7 +108,7 @@ describe("Bookings", () => {
     );
   });
 
-  it("Verify that the [Current Status] and [Current schedules] dispalys correct informations", () => {
+  it("the [Current Status] and [Current schedules] should dispaly correct informations", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(1)
@@ -169,7 +145,7 @@ describe("Bookings", () => {
     });
   });
 
-  it("Verify that users can edit bookings", () => {
+  it("users should be able to edit bookings", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(0)
@@ -226,7 +202,7 @@ describe("Bookings", () => {
       .contains(credentials.BookingTitle10)
       .should("exist");
   });
-  it("Verify that users can delete bookings", () => {
+  it(" users should be able to delete bookings", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .eq(0)
@@ -256,7 +232,7 @@ describe("Bookings", () => {
       .should("not.exist");
   });
 
-  it("verify that users can search for a specified Booking", () => {
+  it("users should be able to search for a specified Booking", () => {
     cy.createBooking(0, credentials);
     cy.get('ol[class="breadcrumb"]').within(() => {
       cy.contains("a", "Rooms").click();
@@ -279,7 +255,7 @@ describe("Bookings", () => {
     );
   });
 
-  it("Verify that the [Group By] filter is functional", () => {
+  it("[Group By] filter should be functional", () => {
     cy.get('div[class="o_cp_right"]').within(() => {
       cy.get('div[class="btn-group o_dropdown"]')
         .contains(" Group By ")
@@ -293,26 +269,7 @@ describe("Bookings", () => {
     );
   });
 
-  //   it.only("Verify that [Bookings] page displays all the meeting rooms", () => {
-  //     const mockResponse = {
-  //       meetingRooms: [{ name: "New Qa Room" }, { seats: "10" }],
-  //     };
-
-  //     cy.intercept(
-  //       "GET",
-  //       "#action=233&model=b_room_booking.room&view_type=list&cids=1&menu_id=122",
-  //       mockResponse
-  //     ).as("getMeetingRooms");
-
-  //     cy.wait("@getMeetingRooms");
-
-  //     cy.get('tbody[class="ui-sortable"]').within(() => {
-  //       cy.contains("New Qa Room").should("exist");
-  //       cy.contains("seats").should("exist");
-  //     });
-  //   });
-
-  it("Verify the export functionality", () => {
+  it(" export functionality should be functional", () => {
     const expectedRooms = [
       {
         Name: "G Big Meeting Room",

@@ -18,5 +18,7 @@
   "NextDate": "08/30/2024",
   "NextDate2": "08/29/2024",
   "UpdatesContents": "-Bug Resolution",
-  "DateValidation": "Something went wrong !"
+  "DateValidation": "Something went wrong !",
+  "EmailSubject": "Minutes: QA Meeting",
+  "PMtitle": "PMT- Test Meeting PJK"
 }

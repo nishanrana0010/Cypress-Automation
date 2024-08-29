@@ -4,13 +4,17 @@
   "description": "Final Assignment",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "CYPRESS_MAILOSAUR_API_KEY=PfeK9vNV00JcFuXWTP2RabJg76ga2MOt npx cypress open"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.13.3"
+    "cypress": "^13.13.3",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0"
   },
   "dependencies": {
     "cypress-downloadfile": "^1.2.4",

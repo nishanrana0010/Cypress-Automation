@@ -26,7 +26,7 @@ describe("Minutes", () => {
     cy.get('div[role="menu"]').find("a").contains("Minutes").click();
   });
 
-  it("Verify that user cannot create a [Meeting] without entering the mandatory fields ", () => {
+  it("Should not allow user to create a [Meeting] without entering the mandatory fields ", () => {
     cy.get('span[class="d-none d-sm-inline"]').contains("Create").click();
     cy.get('span[class="d-none d-sm-inline"]').contains("Save").click();
     cy.get('div[class="o_notification_manager"]').should(
@@ -35,7 +35,7 @@ describe("Minutes", () => {
     );
   });
 
-  it("Verify that user can sucessfully create a Meeting", () => {
+  it("Should allow user to create Meeting successfully", () => {
     cy.get('span[class="d-none d-sm-inline"]').contains("Create").click();
     cy.get('input[placeholder="Meeting Title"]').type(credentials.MeetingTitle);
     cy.get('div[name="member_ids"]').eq(0).click();
@@ -60,7 +60,7 @@ describe("Minutes", () => {
     );
   });
 
-  it("Verify that user can delete a Meeting that doesnt have minutes", () => {
+  it("User should be able delete a Meeting that doesnt have minutes", () => {
     cy.get('tbody[class="ui-sortable"]')
       .contains(credentials.MeetingTitle)
       .eq(0)
@@ -78,7 +78,7 @@ describe("Minutes", () => {
       credentials.MeetingTitle
     );
   });
-  it("Verify that user can edit a Meeting", () => {
+  it("User should be able to edit a Meeting", () => {
     cy.get('span[class="d-none d-sm-inline"]').contains("Create").click();
     cy.get('input[placeholder="Meeting Title"]').type(credentials.MeetingTitle);
     cy.get('div[name="member_ids"]').eq(0).click();
@@ -113,32 +113,23 @@ describe("Minutes", () => {
       credentials.NewMeetingTitle
     );
   });
-  it("Verify that user cannot delete a Meeting that has Minutes in it", () => {
-    cy.get('tbody[class="ui-sortable"]')
-      .contains(credentials.NewMeetingTitle)
-      .click();
-    cy.get('div[name="minutes_count"]').click();
-    // cy.get('button[type="button"]').contains("Create").click();
-    // cy.get('input[placeholder="Minute Title"]').type("Meeting Minutes");
-    // cy.get('div[class="o_input_dropdown"]').eq(0).click();
-    // cy.get('li[class="ui-menu-item"]').contains("Ace User").click();
-    // cy.get('div[class="o_input_dropdown"]').eq(1).click();
-    // cy.get('li[class="ui-menu-item"]').contains("ace user2").click();
-    // cy.get('input[name="next_meeting_date"]').type("08/28/2024");
-    // cy.get('li[class="nav-item"]').contains("Update").click();
-    // cy.get('div[class="note-editable panel-body"]').type(
-    //   "- Food Improvement {enter} - Mentor Selection"
-    // );
-    // cy.get('li[class="nav-item"]').contains("Action Items").click();
-    // cy.get('div[class="note-editable panel-body"]').type(
-    //   "- Khana bhayena {enter} - Mentor Ramro xa"
-    // );
-    // cy.get('button[type="button"]').contains("Save").click();
+  it("User should not be able to delete a Meeting that has Minutes in it", () => {
+    cy.get('tbody[class="ui-sortable"]').contains(credentials.PMtitle).click();
+    cy.get('button[class="btn oe_stat_button"]').within(() => {
+      cy.get('span[class="o_stat_value"]').should("not.contain", "0.00");
+    });
+    cy.get('div[class="btn-group o_dropdown"]').contains("Action").click();
+    cy.get('div[role="menu"]').contains("a", "Delete").click();
+    cy.get('div[class="modal-content"]').within(() => {
+      cy.get('button[type="button"]').contains("Ok").click();
+    });
+    cy.get('div[class="modal-content"]').should(
+      "contain.text",
+      credentials.DateValidation
+    );
   });
-  //   it.only("Verify the Graph View functionality ", () => {
-  //     cy.get('button[data-view-type="graph"]').click();
-  //   });
-  it("Verify the [Filter] functionality", () => {
+
+  it("User should be able to filter meetings", () => {
     cy.get('div[class="btn-group o_dropdown"]').contains(" Filters ").click();
     cy.get('button[type="button"]').contains(credentials.Filter).click();
 
@@ -155,14 +146,14 @@ describe("Minutes", () => {
       credentials.AdminName
     );
   });
-  it("Verify the [Search] functionality", () => {
+  it("User should be able to search for a specific meeting", () => {
     cy.get('input[type="text"]').type(`${credentials.EOD} {enter}`);
     cy.get('td[title="End of the day"]').should(
       "contain.text",
       credentials.EOD
     );
   });
-  it("Verify that Meetings details displays correct information", () => {
+  it(" Meetings details should display correct informations", () => {
     cy.get('span[class="d-none d-sm-inline"]').contains("Create").click();
     cy.get('input[placeholder="Meeting Title"]').type(credentials.MeetingTitle);
     cy.get('div[name="member_ids"]').eq(0).click();
@@ -196,7 +187,7 @@ describe("Minutes", () => {
       });
   });
 
-  it("Verify that user cannot create a minute without entering mandatory fields", () => {
+  it("User should not be able create a minute without entering mandatory fields", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -204,7 +195,11 @@ describe("Minutes", () => {
     });
     cy.get('button[class="btn oe_stat_button"]').click();
     cy.wait(1000);
-    cy.get('button[type="button"]').contains("Create").click();
+    cy.get('button[type="button"]')
+
+      .contains("Create")
+
+      .click();
     cy.get('input[placeholder="Minute Title"]').type(credentials.MeetingTitle);
     cy.get('button[type="button"]').contains("Save").click();
     cy.get('div[class="o_notification_manager"]').should(
@@ -212,7 +207,7 @@ describe("Minutes", () => {
       credentials.ValidationMessage
     );
   });
-  it("Verify that users can create a minute sucessfully", () => {
+  it("Users should be able to create a minute sucessfully", () => {
     cy.createMinutes(credentials);
     cy.get('li[class="breadcrumb-item"]')
       .contains("a", credentials.MeetingTitle)
@@ -235,7 +230,7 @@ describe("Minutes", () => {
         cy.get('td[title="Mitchell Adminnn"]').should("exist");
       });
   });
-  it("Verify that user can edit a Minute", () => {
+  it("User should be able to edit Minute", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -258,7 +253,7 @@ describe("Minutes", () => {
     );
   });
 
-  it("Verify that user can delete a Minute", () => {
+  it("User should be able to delete a Minute", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -276,7 +271,7 @@ describe("Minutes", () => {
       credentials.EditedTitle
     );
   });
-  it("Verify that contents the [Action items] of current minutes are shifted to the [Updates] of next minutes", () => {
+  it("Contents the [Action items] of current minutes should be shifted to the [Updates] of next minutes", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -284,7 +279,11 @@ describe("Minutes", () => {
     });
     cy.get('button[class="btn oe_stat_button"]').click();
     cy.wait(1000);
-    cy.get('button[type="button"]').contains("Create").click();
+    cy.get('button[type="button"]')
+
+      .contains("Create")
+
+      .click();
     cy.get('input[placeholder="Minute Title"]').type(credentials.MinuteTitle);
     cy.get('div[name="next_scribe"]').type("Ace User {enter}");
     cy.get('div[name="next_timekeeper"]').click();
@@ -319,7 +318,7 @@ describe("Minutes", () => {
       credentials.UpdatesContents
     );
   });
-  it("Verify that the contents of current [Parking Lot] is transferred to the [Parking Lot] of next minute", () => {
+  it("Current [Parking Lot] contents should be transferred to the [Parking Lot] of next minute", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -327,7 +326,11 @@ describe("Minutes", () => {
     });
     cy.get('button[class="btn oe_stat_button"]').click();
     cy.wait(1000);
-    cy.get('button[type="button"]').contains("Create").click();
+    cy.get('button[type="button"]')
+
+      .contains("Create")
+
+      .click();
     cy.get('input[placeholder="Minute Title"]').type(credentials.MinuteTitle);
 
     cy.get('div[name="next_scribe"]').type("Ace User {enter}");
@@ -368,7 +371,7 @@ describe("Minutes", () => {
     cy.get('div[class="tab-content"]').should("contain.text", "- Hardware");
   });
 
-  it("Verify that current minute and next minute dates cannot be same", () => {
+  it("Should not allow current minute and next minute dates to be same", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -376,12 +379,18 @@ describe("Minutes", () => {
     });
     cy.get('button[class="btn oe_stat_button"]').click();
     cy.wait(1000);
-    cy.get('button[type="button"]').contains("Create").click();
-    cy.get('input[placeholder="Minute Title"]').type("New QA Minute");
+    cy.get('button[type="button"]')
+
+      .contains("Create")
+
+      .click();
+    cy.get('input[placeholder="Minute Title"]').type(credentials.MinuteTitle);
     cy.get('div[name="next_scribe"]').type("Ace User {enter}");
     cy.get('div[name="next_timekeeper"]').click();
     cy.get('ul[id="ui-id-5"]').within(() => {
-      cy.get('li[class="ui-menu-item"]').contains("Mitchell Adminnn").click();
+      cy.get('li[class="ui-menu-item"]')
+        .contains(credentials.AdminName)
+        .click();
     });
     cy.get('input[name="next_meeting_date"]').type(credentials.NextDate2);
 
@@ -392,7 +401,7 @@ describe("Minutes", () => {
     );
   });
 
-  it("Verify that notification mail is sent to the attendees", () => {
+  it(" notification mail should be sent to the attendees", () => {
     cy.get('tbody[class="ui-sortable"]').within(() => {
       cy.get('tr[class="o_data_row"]')
         .contains(credentials.MeetingTitle)
@@ -438,7 +447,16 @@ describe("Minutes", () => {
         timeout: 60000,
       }
     ).then((email) => {
-      expect(email.subject).to.include("Minutes: QA Meeting");
+      expect(email.subject).to.include(credentials.EmailSubject);
     });
+  });
+  it("Should display graphical representation ", () => {
+    cy.get('nav[role="toolbar"]').within(() => {
+      cy.get('button[type="button"]').eq(1).click();
+    });
+    cy.get('div[class="o_graph_renderer"]').should("exist");
+
+    cy.get('button[data-mode="pie"]').click();
+    cy.get('div[class="o_graph_renderer"]').should("be.visible");
   });
 });

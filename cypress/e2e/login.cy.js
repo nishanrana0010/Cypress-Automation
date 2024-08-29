@@ -20,7 +20,7 @@ describe("TODO App", () => {
     cy.visit(urls.LoginUrl);
   });
 
-  it("Verify if validation message is displayed when mandatory fields are left empty.", () => {
+  it("validation message should be displayed when mandatory fields are left empty.", () => {
     cy.login("", "").then(() => {
       cy.get('input[type="text"]').then(($input) => {
         expect($input[0].validationMessage).to.eq(
@@ -30,7 +30,7 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify that users cannot to login with invalid credentials.", () => {
+  it("users should not be to login with invalid credentials.", () => {
     cy.login(credentials.invalidEmail, credentials.invalidPassword).then(() => {
       cy.get('form[role="form"]').within(() => {
         cy.get('p[role="alert"]').should(
@@ -63,7 +63,7 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify that forgot password link is clickable and redirects to [resert password] page", () => {
+  it("forgot password link should be clickable and redirects user to [resert password] page", () => {
     cy.get('form[role="form"]').within(() => {
       cy.get('div[class="justify-content-between mt-2 d-flex small"]')
         .contains("Reset Password")
@@ -72,15 +72,15 @@ describe("TODO App", () => {
     });
   });
 
-  it("Verify if user can login with valid credentials.", () => {
+  it("user should be able to login with valid credentials.", () => {
     cy.login(userEmail, validPassword);
-    cy.get(".full > .fa").click();
+    cy.get('ul[class="o_menu_apps"]').click();
     cy.get('div[role="menu"]').should("not.contain.text", "Settings");
   });
 
-  it("Verify if admin can login with valid credentials.", () => {
+  it("admin should be able to login with valid credentials.", () => {
     cy.login(validEmail, validPassword);
-    cy.get(".full > .fa").click();
+    cy.get('ul[class="o_menu_apps"]').click();
     cy.get('div[role="menu"]').should("contain.text", "Settings");
   });
 });
